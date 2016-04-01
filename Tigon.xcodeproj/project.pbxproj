@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		723AB7591CAED7530028E70A /* Tigon.h in Headers */ = {isa = PBXBuildFile; fileRef = 723AB7581CAED7530028E70A /* Tigon.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		723AB7601CAED7530028E70A /* Tigon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 723AB7551CAED7530028E70A /* Tigon.framework */; };
-		723AB7651CAED7530028E70A /* TigonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723AB7641CAED7530028E70A /* TigonTests.swift */; };
+		728BFF901CAEF1C300890514 /* TigonWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CD20981CAED7CD00ACBDDA /* TigonWebView.swift */; };
+		728BFF921CAEF2F700890514 /* TigonRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728BFF911CAEF2F700890514 /* TigonRequestTests.swift */; };
+		728BFF931CAEF4E000890514 /* TigonScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CD20971CAED7CD00ACBDDA /* TigonScriptMessageHandler.swift */; };
 		72CD20991CAED7CD00ACBDDA /* TigonScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CD20971CAED7CD00ACBDDA /* TigonScriptMessageHandler.swift */; };
 		72CD209A1CAED7CD00ACBDDA /* TigonWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72CD20981CAED7CD00ACBDDA /* TigonWebView.swift */; };
 /* End PBXBuildFile section */
@@ -29,8 +31,8 @@
 		723AB7581CAED7530028E70A /* Tigon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tigon.h; sourceTree = "<group>"; };
 		723AB75A1CAED7530028E70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		723AB75F1CAED7530028E70A /* TigonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TigonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		723AB7641CAED7530028E70A /* TigonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TigonTests.swift; sourceTree = "<group>"; };
 		723AB7661CAED7530028E70A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		728BFF911CAEF2F700890514 /* TigonRequestTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TigonRequestTests.swift; sourceTree = "<group>"; };
 		72CD20971CAED7CD00ACBDDA /* TigonScriptMessageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TigonScriptMessageHandler.swift; sourceTree = "<group>"; };
 		72CD20981CAED7CD00ACBDDA /* TigonWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TigonWebView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,8 +88,8 @@
 		723AB7631CAED7530028E70A /* TigonTests */ = {
 			isa = PBXGroup;
 			children = (
-				723AB7641CAED7530028E70A /* TigonTests.swift */,
 				723AB7661CAED7530028E70A /* Info.plist */,
+				728BFF911CAEF2F700890514 /* TigonRequestTests.swift */,
 			);
 			path = TigonTests;
 			sourceTree = "<group>";
@@ -209,7 +211,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				723AB7651CAED7530028E70A /* TigonTests.swift in Sources */,
+				728BFF921CAEF2F700890514 /* TigonRequestTests.swift in Sources */,
+				728BFF901CAEF1C300890514 /* TigonWebView.swift in Sources */,
+				728BFF931CAEF4E000890514 /* TigonScriptMessageHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
