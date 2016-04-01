@@ -25,17 +25,19 @@ public enum TigonRequestMethod: String {
     case PUT
     case POST
     case DELETE
+    case HEAD
+    case OPTIONS
 }
 
 public enum TigonException: ErrorType {
     case InvalidRequest     // Catch-all exception. A use case might be when a required key in `params` is missing for a given request.
-    case MissingId          // In case Tigon somehow failed to send an id in the request. This probably won't happen unless someone is overwriting Tigon.js
+    case InvalidId          // In case Tigon somehow failed to send an id in the request. This probably won't happen unless someone is overwriting Tigon.js
     case InvalidPath        // The given `path` is not supported. Either the app implementing Tigon, or not allowed for the given `method`.
     case InvalidMethod      // The method (GET, PUT, etc) is not supported for the given request
     case AppSpecific(localizedDescription: String)
     var localizedDescription: String {
         switch self {
-        case .MissingId: return NSLocalizedString("TIGON_EXCEPTION_MESSAGE_MISSING_ID", comment: "")
+        case .InvalidId: return NSLocalizedString("TIGON_EXCEPTION_MESSAGE_MISSING_ID", comment: "")
         case .InvalidPath: return NSLocalizedString("TIGON_EXCEPTION_MESSAGE_INVALID_PATH", comment: "")
         case .InvalidMethod: return NSLocalizedString("TIGON_EXCEPTION_MESSAGE_INVALID_METHOD", comment: "")
         case .InvalidRequest: return NSLocalizedString("TIGON_EXCEPTION_MESSAGE_INVALID_REQUEST", comment: "")
@@ -52,7 +54,7 @@ public struct TigonRequest {
     
     init(_ body: [NSObject: AnyObject]) throws {
         guard let id = body["id"] as? String where id.characters.count > 0 else {
-            throw TigonException.MissingId
+            throw TigonException.InvalidId
         }
         guard let path = body["path"] as? String else {
             throw TigonException.InvalidPath
@@ -86,7 +88,6 @@ public class TigonWebView: WKWebView {
         configuration.userContentController = contentController
         
         super.init(frame: CGRectZero, configuration: configuration)
-        translatesAutoresizingMaskIntoConstraints = false
         messageHandler.delegate = self
     }
     
