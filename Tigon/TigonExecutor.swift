@@ -20,13 +20,13 @@ extension TigonWebView: TigonExecutor {
     
     public func sendJavascriptError(id: String, error: NSError) {
         let responseString = stringifyResponse(error)
-        let script = "Tigon.receivedTigonMessageError('\(id)', \(responseString))"
+        let script = "tigon.receivedErrorResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
     public func sendJavascriptSuccess(id: String, response: AnyObject) {
         let responseString = stringifyResponse(response)
-        let script = "Tigon.receivedTigonMessageSuccess('\(id)', \(responseString))"
+        let script = "tigon.receivedSuccessResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
