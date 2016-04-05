@@ -14,13 +14,13 @@ public protocol TigonMessageHandler: WKScriptMessageHandler {
     func messageError(error: TigonError, message: WKScriptMessage)
 }
 
-extension TigonMessageHandler {
+public extension TigonMessageHandler {
     func messageError(error: TigonError, message: WKScriptMessage) {
         print("\(error): \(message.body)")
     }
 }
 
-extension WKUserContentController {
+public extension WKUserContentController {
     func addTigonMessageHandler(messageHandler: TigonMessageHandler) {
         let scriptMessageHandler = TigonScriptMessageHandler(delegate: messageHandler)
         addScriptMessageHandler(scriptMessageHandler, name: "tigon")
