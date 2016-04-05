@@ -8,9 +8,12 @@
 
 import Foundation
 
+/// An ErrorType used when parsing a message fails.
 public enum TigonError: ErrorType {
+    /// The message identifier was missing or malformed.
     case InvalidId
+    /// The message payload was missing or malformed.
     case InvalidPayload
+    /// The message was unreadable.
     case UnexpectedMessageFormat
-    case Unknown
 }

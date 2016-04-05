@@ -9,12 +9,16 @@
 import Foundation
 import WebKit
 
-/*!
- *  WKUserContentController retains its message handler
- *  TigonScriptMessageHandler is a trampoline object between the WKUserContentController and the message handler
- *  http://stackoverflow.com/questions/26383031/wkwebview-causes-my-view-controller-to-leak
- */
-
+/**
+ `TigonScriptMessageHandler` parses `Tigon` messages from javascript and passes them to the `TigonMessageHandler` provided in `addTigonMessageHandler(_:)`.
+ If the message is not a `Tigon` message, it passes through to the default `userContentController(_:didReceiveScriptMessage:)` method specified by `WKScriptMessageHandler`
+ 
+ `WKUserContentController` retains its message handler.
+ `TigonScriptMessageHandler` is a trampoline object between the `WKUserContentController` and the message handler.
+ 
+ seealso:
+  [stackoverflow - WKWebView causes my view controller to leak](http://stackoverflow.com/questions/26383031/wkwebview-causes-my-view-controller-to-leak)
+*/
 public class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
     
     public weak var delegate: TigonMessageHandler?
@@ -45,11 +49,7 @@ public class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
             delegate?.handleMessage(id, payload: payload)
             
         } catch {
-            if let error = error as? TigonError {
-                delegate?.messageError(error, message: message)
-            } else {
-                delegate?.messageError(.Unknown, message: message)
-            }
+            delegate?.messageError(error, message: message)
         }
     }
 }

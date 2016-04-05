@@ -9,11 +9,60 @@
 import Foundation
 import WebKit
 
+/**
+ TigonExecuter provides a simple interface for interacting with Javascript. It assumes Tigon.js is included in the HTML.
+ 
+ TigonExecutor has default implementations for WKWebView.
+ There is no need to implement this protocol unless you want custom behavior.
+
+ - seealso:
+    [tigon-js](https://github.com/SmartThingsOSS/tigon-js)
+ 
+*/
 public protocol TigonExecutor {
+    
+    /**
+     A way to respond to a message with an error.
+     
+     - parameters:
+        - id: The id of the original message
+        - error: The error to pass back to the sender of the original message
+     */
     func sendErrorResponse(id: String, error: NSError)
+
+    /**
+     A way to respond to a message with a success object.
+     
+     - parameters:
+        - id: The id of the original message
+        - response: The success object to pass back to the sender of the original message
+     */
     func sendSuccessResponse(id: String, response: AnyObject)
+    
+    /**
+     A way to send a message to javascript.
+     
+     - parameters:
+        - message: The message to send. This can be a stringified object.
+     */
     func sendMessage(message: String)
+    
+    /**
+     A way to stringify objects in a way that is standard to Tigon
+    
+     - parameters:
+        - object: The object to stringify
+     
+     This is called by `sendSuccessResponse` and `sendErrorResponse` before sending the message response.
+     */
     func stringifyResponse(object: AnyObject) -> String
+    
+    /**
+     A simplified wrapper for `evaluateJavaScript`
+     
+     - paramters:
+        - script: The script to be executed
+    */
     func executeJavascript(script: String)
 }
 
