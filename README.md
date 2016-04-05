@@ -60,7 +60,7 @@ class ExampleViewController: UIViewController {
   }
 
   ...
-  
+
 }
 
 extension ExampleViewController: TigonMessageHandler {
@@ -71,10 +71,10 @@ extension ExampleViewController: TigonMessageHandler {
       // handle a message from javascript
       let successObject = try thatThing(payload)
       // let your javascript know it succeeded
-      sendSuccessResponse(id, response: successObject)
+      webView?.sendSuccessResponse(id, response: successObject)
     } catch {
       // let your javascript know it didn't succeed
-      sendErrorResponse(id, error: error)
+      webView?.sendErrorResponse(id, error: error)
     }
   }
 
