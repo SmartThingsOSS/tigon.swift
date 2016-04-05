@@ -10,24 +10,29 @@ import Foundation
 import WebKit
 
 public protocol TigonExecutor {
-    func sendJavascriptError(id: String, error: NSError)
-    func sendJavascriptSuccess(id: String, response: AnyObject)
+    func sendErrorResponse(id: String, error: NSError)
+    func sendSuccessResponse(id: String, response: AnyObject)
+    func sendMessage(message: String)
     func stringifyResponse(object: AnyObject) -> String
     func executeJavascript(script: String)
 }
 
-extension TigonWebView: TigonExecutor {
+extension WKWebView: TigonExecutor {
     
-    public func sendJavascriptError(id: String, error: NSError) {
+    public func sendErrorResponse(id: String, error: NSError) {
         let responseString = stringifyResponse(error)
         let script = "tigon.receivedErrorResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
-    public func sendJavascriptSuccess(id: String, response: AnyObject) {
+    public func sendSuccessResponse(id: String, response: AnyObject) {
         let responseString = stringifyResponse(response)
         let script = "tigon.receivedSuccessResponse('\(id)', \(responseString))"
         executeJavascript(script)
+    }
+    
+    public func sendMessage(message: String) {
+        executeJavascript("tigon.receivedMessage(\(message))")
     }
     
     public func stringifyResponse(object: AnyObject) -> String {
