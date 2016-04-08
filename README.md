@@ -32,7 +32,7 @@ Installation
 
 Usage
 -----
-Tigon is designed to stay out of your way while still providing you with an easy-to-use communication layer. All you have to do is implement the `TigonMessageHandler` protocol and add your implementer to your contentController by calling `addTigonMessageHandler(_)`. Whatever else you want to do with your `WKWebView` is up to you.
+Tigon is designed to stay out of your way while still providing you with an easy-to-use communication layer. All you have to do is implement the `TigonMessageHandler` protocol and add your implementer to your contentController by calling `addTigonMessageHandler(_)`. Whatever else you want to do with your `WKWebView` is up to you. Just make sure you call `removeTigonMessageHandler()` during `deinit` or you will leak your webView.
 
 Here is an example ViewController that uses Tigon
 ```swift
@@ -42,6 +42,11 @@ import Tigon
 class ExampleViewController: UIViewController {
 
   weak var webView: WKWebView?
+
+  deinit {
+    // Make sure we remove our message handler or we will leak our webView.
+    webView?.configuration.userContentController.removeTigonMessageHandler()
+  }
 
   override func viewDidLoad() {
     super.viewDidLoad()

@@ -23,8 +23,9 @@ public class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
     
     public weak var delegate: TigonMessageHandler?
     
-    init(delegate: TigonMessageHandler) {
+    public init(delegate: TigonMessageHandler) {
         self.delegate = delegate
+        super.init()
     }
     
     public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
