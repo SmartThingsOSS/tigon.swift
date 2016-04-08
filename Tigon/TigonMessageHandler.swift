@@ -63,4 +63,17 @@ public extension WKUserContentController {
         let scriptMessageHandler = TigonScriptMessageHandler(delegate: messageHandler)
         addScriptMessageHandler(scriptMessageHandler, name: "tigon")
     }
+    
+    /**
+     A way to remove yourself as the `TigonMessageHandler` for your `WKWebView`.
+     Make sure you do this in the `deinit` of the viewController that holds your `WKWebView`.
+     Failing to call this will cause a leak due to the retain logic between `WKWebView` and `WKUserContentController`
+     
+         deinit {
+             webView?.configuration.userContentController.removeTigonMessageHandler()
+         }
+     */
+    func removeTigonMessageHandler() {
+        removeScriptMessageHandlerForName("tigon")
+    }
 }
