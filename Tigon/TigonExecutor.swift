@@ -28,7 +28,7 @@ public protocol TigonExecutor {
         - id: The id of the original message
         - error: The error to pass back to the sender of the original message
      */
-    func sendErrorResponse(id: String, error: NSError)
+    func sendErrorResponse(_ id: String, error: NSError)
 
     /**
      A way to respond to a message with a success object.
@@ -37,7 +37,7 @@ public protocol TigonExecutor {
         - id: The id of the original message
         - response: The success object to pass back to the sender of the original message
      */
-    func sendSuccessResponse(id: String, response: AnyObject)
+    func sendSuccessResponse(_ id: String, response: AnyObject)
     
     /**
      A way to send a message to javascript.
@@ -45,7 +45,7 @@ public protocol TigonExecutor {
      - parameters:
         - message: The message to send. This can be a stringified object.
      */
-    func sendMessage(message: String)
+    func sendMessage(_ message: String)
     
     /**
      A way to stringify objects in a way that is standard to Tigon
@@ -55,7 +55,7 @@ public protocol TigonExecutor {
      
      This is called by `sendSuccessResponse` and `sendErrorResponse` before sending the message response.
      */
-    func stringifyResponse(object: AnyObject) -> String
+    func stringifyResponse(_ object: AnyObject) -> String
     
     /**
      A simplified wrapper for `evaluateJavaScript`
@@ -63,40 +63,40 @@ public protocol TigonExecutor {
      - paramters:
         - script: The script to be executed
     */
-    func executeJavascript(script: String)
+    func executeJavascript(_ script: String)
 }
 
 extension WKWebView: TigonExecutor {
     
-    public func sendErrorResponse(id: String, error: NSError) {
+    public func sendErrorResponse(_ id: String, error: NSError) {
         let responseString = stringifyResponse(error)
         let script = "tigon.receivedErrorResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
-    public func sendSuccessResponse(id: String, response: AnyObject) {
+    public func sendSuccessResponse(_ id: String, response: AnyObject) {
         let responseString = stringifyResponse(response)
         let script = "tigon.receivedSuccessResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
-    public func sendMessage(message: String) {
+    public func sendMessage(_ message: String) {
         executeJavascript("tigon.receivedMessage(\(message))")
     }
     
-    public func stringifyResponse(object: AnyObject) -> String {
+    public func stringifyResponse(_ object: AnyObject) -> String {
         var responseString = "{}"
         
         do {
             switch object {
-            case let dictionary as [NSObject: AnyObject]:
-                let json = try NSJSONSerialization.dataWithJSONObject(dictionary, options: .PrettyPrinted)
-                if let encodedString = String(data: json, encoding: NSUTF8StringEncoding) {
+            case let dictionary as [AnyHashable: Any]:
+                let json = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+                if let encodedString = String(data: json, encoding: String.Encoding.utf8) {
                     responseString = encodedString
                 }
             case let array as [AnyObject]:
-                let json = try NSJSONSerialization.dataWithJSONObject(array, options: .PrettyPrinted)
-                if let encodedString = String(data: json, encoding: NSUTF8StringEncoding) {
+                let json = try JSONSerialization.data(withJSONObject: array, options: .prettyPrinted)
+                if let encodedString = String(data: json, encoding: String.Encoding.utf8) {
                     responseString = encodedString
                 }
             case let string as String:
@@ -116,7 +116,7 @@ extension WKWebView: TigonExecutor {
         return responseString
     }
     
-    public func executeJavascript(script: String) {
+    public func executeJavascript(_ script: String) {
         evaluateJavaScript(script) { (_, error) -> Void in
             if let error = error {
                 print("Tigon failed to evaluate javascript: \(script); error: \(error.localizedDescription)")

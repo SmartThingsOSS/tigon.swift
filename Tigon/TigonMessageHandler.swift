@@ -23,7 +23,7 @@ public protocol TigonMessageHandler: WKScriptMessageHandler {
      - seealso:
       [tigon-js](https://github.com/SmartThingsOSS/tigon-js/)
     */
-    func handleMessage(id: String, payload: AnyObject)
+    func handleMessage(_ id: String, payload: AnyObject)
 
     /**
      A way to receive errors when a `Tigon` fails to handle a message.
@@ -32,12 +32,12 @@ public protocol TigonMessageHandler: WKScriptMessageHandler {
         - error: The error that occurred while trying to parse the message
         - message: The `WKScriptMessage` that couldn't be parsed.
      */
-    func messageError(error: ErrorType, message: WKScriptMessage)
+    func messageError(_ error: TigonError, message: WKScriptMessage)
 }
 
 public extension TigonMessageHandler {
     /// The default implementation for `messageError(_:message:)`
-    func messageError(error: TigonError, message: WKScriptMessage) {
+    func messageError(_ error: TigonError, message: WKScriptMessage) {
         print("\(error): \(message.body)")
     }
 }
@@ -59,9 +59,9 @@ public extension WKUserContentController {
          let webView = WKWebView(frame: CGRectZero, configuration: configuration)
 
     */
-    func addTigonMessageHandler(messageHandler: TigonMessageHandler) {
+    func addTigonMessageHandler(_ messageHandler: TigonMessageHandler) {
         let scriptMessageHandler = TigonScriptMessageHandler(delegate: messageHandler)
-        addScriptMessageHandler(scriptMessageHandler, name: "tigon")
+        add(scriptMessageHandler, name: "tigon")
     }
     
     /**
@@ -74,6 +74,6 @@ public extension WKUserContentController {
          }
      */
     func removeTigonMessageHandler() {
-        removeScriptMessageHandlerForName("tigon")
+        removeScriptMessageHandler(forName: "tigon")
     }
 }

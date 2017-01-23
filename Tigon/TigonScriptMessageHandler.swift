@@ -19,38 +19,40 @@ import WebKit
  seealso:
   [stackoverflow - WKWebView causes my view controller to leak](http://stackoverflow.com/questions/26383031/wkwebview-causes-my-view-controller-to-leak)
 */
-public class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
+open class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
     
-    public weak var delegate: TigonMessageHandler?
+    open weak var delegate: TigonMessageHandler?
     
     public init(delegate: TigonMessageHandler) {
         self.delegate = delegate
         super.init()
     }
     
-    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    open func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         
         guard message.name == "tigon" else {
             // not a tigon message; allow WKScriptMessageHandler to do it's thing
-            delegate?.userContentController(userContentController, didReceiveScriptMessage: message)
+            delegate?.userContentController(userContentController, didReceive: message)
             return
         }
         
         do {
             guard var body = message.body as? [String: AnyObject] else {
-                throw TigonError.UnexpectedMessageFormat
+                throw TigonError.unexpectedMessageFormat
             }
             guard let id = body["id"] as? String else {
-                throw TigonError.InvalidId
+                throw TigonError.invalidId
             }
             guard let payload = body["payload"] else {
-                throw TigonError.InvalidPayload
+                throw TigonError.invalidPayload
             }
             
             delegate?.handleMessage(id, payload: payload)
             
-        } catch {
+        } catch let error as TigonError {
             delegate?.messageError(error, message: message)
+        } catch {
+            // do something here?
         }
     }
 }
