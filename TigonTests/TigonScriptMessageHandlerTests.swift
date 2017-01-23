@@ -31,30 +31,30 @@ class TigonScriptMessageHandlerTests: XCTestCase {
         
         var didReceiveScriptMessage: WKScriptMessage? = nil
         
-        func handleMessage(id: String, payload: AnyObject) {
+        func handleMessage(_ id: String, payload: AnyObject) {
             messageId = id
             messagePayload = payload
         }
-        func messageError(error: TigonError, message: WKScriptMessage) {
+        func messageError(_ error: TigonError, message: WKScriptMessage) {
             messageError = error
             messageErrorMessage = message
         }
-        func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             didReceiveScriptMessage = message
         }
     }
     
     class MockScriptMessage: WKScriptMessage {
         
-        let mockBody: AnyObject
+        let mockBody: Any
         let mockName: String
         
-        init(name: String, body: AnyObject) {
+        init(name: String, body: Any) {
             mockName = name
             mockBody = body
         }
         
-        override var body: AnyObject {
+        override var body: Any {
             return mockBody
         }
         
@@ -66,10 +66,10 @@ class TigonScriptMessageHandlerTests: XCTestCase {
     func testDidReceiveScriptMessage_nonTigonMessages_areSentThroughDidReceiveScriptMessage() {
         let messageHandler = MockTigonMessageHandler()
         let scriptMessageHandler = TigonScriptMessageHandler(delegate: messageHandler)
-        let mockMessage = MockScriptMessage(name: "test", body: "some non-tigon message")
+        let mockMessage = MockScriptMessage(name: "test", body: "some non-tigon message" as AnyObject)
         
         // pass a mock object to the scriptMessageHandler and verify that it passed it along to our other mocked object
-        scriptMessageHandler.userContentController(WKUserContentController(), didReceiveScriptMessage: mockMessage)
+        scriptMessageHandler.userContentController(WKUserContentController(), didReceive: mockMessage)
         
         XCTAssertNotNil(messageHandler.didReceiveScriptMessage)
         XCTAssertEqual(messageHandler.didReceiveScriptMessage?.name, "test")
@@ -79,13 +79,13 @@ class TigonScriptMessageHandlerTests: XCTestCase {
     func testDidReceiveScriptMessage_messagesWithUnexpectedMessageBody_areSentThroughMessageError() {
         let messageHandler = MockTigonMessageHandler()
         let scriptMessageHandler = TigonScriptMessageHandler(delegate: messageHandler)
-        let mockMessage = MockScriptMessage(name: "tigon", body: "some non-tigon message")
+        let mockMessage = MockScriptMessage(name: "tigon", body: "some non-tigon message" as AnyObject)
         
         // pass a mock object to the scriptMessageHandler and verify that it passed it along to our other mocked object
-        scriptMessageHandler.userContentController(WKUserContentController(), didReceiveScriptMessage: mockMessage)
+        scriptMessageHandler.userContentController(WKUserContentController(), didReceive: mockMessage)
         
         XCTAssertNotNil(messageHandler.messageError)
-        XCTAssertEqual(messageHandler.messageError, TigonError.UnexpectedMessageFormat)
+        XCTAssertEqual(messageHandler.messageError, TigonError.unexpectedMessageFormat)
         XCTAssertNotNil(messageHandler.messageErrorMessage)
         XCTAssertEqual(messageHandler.messageErrorMessage, mockMessage)
     }
@@ -96,10 +96,10 @@ class TigonScriptMessageHandlerTests: XCTestCase {
         let mockMessage = MockScriptMessage(name: "tigon", body: ["id": 5, "payload": "some message"])
         
         // pass a mock object to the scriptMessageHandler and verify that it passed it along to our other mocked object
-        scriptMessageHandler.userContentController(WKUserContentController(), didReceiveScriptMessage: mockMessage)
+        scriptMessageHandler.userContentController(WKUserContentController(), didReceive: mockMessage)
         
         XCTAssertNotNil(messageHandler.messageError)
-        XCTAssertEqual(messageHandler.messageError, TigonError.InvalidId)
+        XCTAssertEqual(messageHandler.messageError, TigonError.invalidId)
         XCTAssertNotNil(messageHandler.messageErrorMessage)
         XCTAssertEqual(messageHandler.messageErrorMessage, mockMessage)
     }
@@ -110,10 +110,10 @@ class TigonScriptMessageHandlerTests: XCTestCase {
         let mockMessage = MockScriptMessage(name: "tigon", body: ["id": "test"])
         
         // pass a mock object to the scriptMessageHandler and verify that it passed it along to our other mocked object
-        scriptMessageHandler.userContentController(WKUserContentController(), didReceiveScriptMessage: mockMessage)
+        scriptMessageHandler.userContentController(WKUserContentController(), didReceive: mockMessage)
         
         XCTAssertNotNil(messageHandler.messageError)
-        XCTAssertEqual(messageHandler.messageError, TigonError.InvalidPayload)
+        XCTAssertEqual(messageHandler.messageError, TigonError.invalidPayload)
         XCTAssertNotNil(messageHandler.messageErrorMessage)
         XCTAssertEqual(messageHandler.messageErrorMessage, mockMessage)
     }
@@ -124,7 +124,7 @@ class TigonScriptMessageHandlerTests: XCTestCase {
         let mockMessage = MockScriptMessage(name: "tigon", body: ["id": "test", "payload": "some message"])
         
         // pass a mock object to the scriptMessageHandler and verify that it passed it along to our other mocked object
-        scriptMessageHandler.userContentController(WKUserContentController(), didReceiveScriptMessage: mockMessage)
+        scriptMessageHandler.userContentController(WKUserContentController(), didReceive: mockMessage)
         
         XCTAssertNotNil(messageHandler.messageId)
         XCTAssertEqual(messageHandler.messageId, "test")
