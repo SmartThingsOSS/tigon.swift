@@ -68,13 +68,13 @@ public protocol TigonExecutor {
 
 extension WKWebView: TigonExecutor {
     
-    public func sendErrorResponse(_ id: String, error: NSError) {
+    open func sendErrorResponse(_ id: String, error: NSError) {
         let responseString = stringifyResponse(error)
         let script = "tigon.receivedErrorResponse('\(id)', \(responseString))"
         executeJavascript(script)
     }
     
-    public func sendSuccessResponse(_ id: String, response: AnyObject) {
+    open func sendSuccessResponse(_ id: String, response: AnyObject) {
         let responseString = stringifyResponse(response)
         let script = "tigon.receivedSuccessResponse('\(id)', \(responseString))"
         executeJavascript(script)
