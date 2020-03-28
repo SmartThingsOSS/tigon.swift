@@ -37,7 +37,7 @@ open class TigonScriptMessageHandler: NSObject, WKScriptMessageHandler {
         }
         
         do {
-            guard var body = message.body as? [String: AnyObject] else {
+            guard let body = message.body as? [String: AnyObject] else {
                 throw TigonError.unexpectedMessageFormat
             }
             guard let id = body["id"] as? String else {
